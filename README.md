@@ -1,8 +1,8 @@
 <div align="center">
 
-# Docscode
+# Docscode —— 面向文档编程
 
-**Markdown 是AI时代的源代码**
+# **Markdown 是AI时代的源代码**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](./LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/ikunycj/docscode?style=social)](https://github.com/ikunycj/docscode)

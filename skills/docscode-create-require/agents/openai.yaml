@@ -1,4 +1,0 @@
-interface:
-  display_name: "Create Requirement Docs"
-  short_description: "Draft or refine require.md and test.md under docs/requirements."
-  default_prompt: "Use $docscode-create-require to draft or refine require.md and test.md for a requirement without implementing code."

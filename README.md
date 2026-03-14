@@ -2,14 +2,14 @@
 
 # Docscode
 
-**Open-source Codex Skills for Chinese requirements workflows**
+**Markdown 是AI时代的源代码**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](./LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/ikunycj/docscode?style=social)](https://github.com/ikunycj/docscode)
 [![Last Commit](https://img.shields.io/github/last-commit/ikunycj/docscode)](https://github.com/ikunycj/docscode/commits/master)
 
-面向 `docs/requirements/` 工作流的开源 Skills 仓库。  
-把需求初始化、需求撰写、需求归档，做成可以安装、复用、迭代的 Skill。
+面向文档驱动编程工作模式的开源 Skills 仓库。  
+规范化个人新项目需求编写流程，把“不清晰的需求”编程“明确记录的需求+测试方案”。
 
 </div>
 
@@ -19,33 +19,20 @@
 
 `Docscode` 不是一组零散提示词，而是一套围绕需求文档生命周期设计的 Skills：
 
-- 初始化文档工作区
-- 把模糊需求整理成 `require.md` / `test.md`
-- 将已完成或废弃的 requirement 目录安全归档
+- `docscode-init-require`: 初始化文档工作区
+- `docscode-create-require`: 把模糊需求整理成 `require.md` / `test.md`
+- `docscode-archive-require`: 将已完成或废弃的 requirement 目录安全归档
 
 它适合这类场景：
 
-- 你希望 AI 输出更像真实团队里的需求文档，而不是泛化 PRD
-- 你希望把文档流程沉淀为可安装、可评审、可版本化的 Skill
-- 你希望在 GitHub 上公开维护自己的 Skills，而不是只在本地使用
-
-## Why This Project
-
-- **围绕真实目录结构设计**：直接服务于 `docs/requirements/`、`require.md`、`test.md`
-- **强调 guardrails**：减少“顺手改代码”“顺手改无关文档”这类越界行为
-- **适合中文场景**：以中文需求分析、验收描述、测试设计为核心表达
-- **可组合使用**：初始化、撰写、归档是三个独立 Skill，也是一条完整工作流
-- **适合开源维护**：每个 Skill 都是独立发布单元，可通过 PR / Issue / Release 演进
+- 新项目，需求模糊，只有大致的蓝图
+- 想要快速利用AI生成MVP产品，但是很难控制AI生成质量
 
 ## AI Coding Best Practices
 
-这个仓库并不把 Skill 当成“几段 prompt”，而是把它放进一条更完整的 AI Coding 工作流里。
+1. **Docscode Skills**：负责把需求文档生命周期标准化，尤其是 `docs/requirements/` 这层文档工作
+2. **OpenSpec**：把具体需求拆成设计草图 `proposal`、`specs`、`design`、`tasks`
 
-推荐组合方式：
-
-- **OpenSpec**：把模糊需求拆成 `proposal`、`specs`、`design`、`tasks`
-- **Codex CLI**：作为真正执行命令、落地实现、并发协作的入口
-- **Docscode Skills**：负责把需求文档生命周期标准化，尤其是 `docs/requirements/` 这层文档工作
 
 相关项目：
 
@@ -53,9 +40,7 @@
 
 ### Documentation-Oriented Programming
 
-这套工作流的核心前提是：文档先于代码，文档约束代码。
-
-在 AI Coding 场景里，Markdown 不只是说明文档，更像是一种高价值的“源代码”：
+这套工作流的核心核心是：Markdown 是AI时代的源代码。
 
 - `README.md` 解释项目定位
 - `AGENTS.md` 告诉 AI 工具项目规则和边界
@@ -104,80 +89,85 @@ docs/
 | `docscode-create-require` | 生成或更新 `require.md` 与 `test.md`，建立 `REQ / AC / TC` 追踪关系 | 只有简要需求，需要落成结构化文档 |
 | `docscode-archive-require` | 将完成、废弃或不再维护的 requirement 目录移入 `archive/` | 功能已结束维护，需要关闭对应需求目录 |
 
-## How The Workflow Fits Together
-
-```mermaid
-flowchart LR
-    A[Init Workspace] --> B[Draft Requirement]
-    B --> C[Review / Iterate]
-    C --> D[Archive Finished Requirement]
-```
-
-推荐的使用顺序：
-
-1. 先用 `docscode-init-require` 建立文档骨架
-2. 再用 `docscode-create-require` 产出 `require.md` 与 `test.md`
+t.md`
 3. 需求完成或废弃后，用 `docscode-archive-require` 做归档
 
 ## Recommended End-to-End Workflow
 
-如果你采用 `OpenSpec + Codex CLI + Docscode Skills` 这套组合，可以按下面的顺序工作：
+如果你采用 `OpenSpec + CLI Agent + Docscode Skills` 这套组合，可以按下面的顺序工作：
 
 1. 基于 `PRD`、`CURRENT`、`ARCHITETUCTURE`、`API`、`AGENTS` 生成某次需求的 `requirename-date/`
 2. 使用 `docscode-create-require` 补齐并细化 `require.md` 与 `test.md`
 3. 执行 OpenSpec 的 `opsx-propose`，生成 `proposal`、`spec`、`design`、`tasks`
 4. 再执行 `opsx-apply` 落地代码，并依据 `test.md` 进行验证
-5. 需求完成后，使用 `docscode-archive-require` 归档对应目录
+5. 需求完成后，使用 `opsx-archive`和`docscode-archive-require` 归档对应目录
 
 对应关系可以理解为：
 
 - `Docscode`：管理需求文档输入与归档
 - `OpenSpec`：管理变更设计与任务拆分
-- `Codex CLI`：管理实际实现与验证过程
+- `Agent`：管理实际实现与验证过程
 
-## Quick Start
+## Download And Install
 
-推荐通过 GitHub 仓库路径安装单个 Skill。
+这些 Skills 以普通目录的形式发布，不依赖 Codex 专用安装脚本。  
+你可以用任何支持本地 Skill 目录、Agent Recipe、Prompt Pack 或工作流模板导入的工具来使用它们。
 
-安装 `docscode-init-require`：
+### Option 1: Download ZIP
 
-```bash
-python install-skill-from-github.py \
-  --repo ikunycj/docscode \
-  --path skills/docscode-init-require \
-  --ref master
-```
+1. 打开仓库首页：`https://github.com/ikunycj/docscode`
+2. 点击 `Code -> Download ZIP`
+3. 解压后进入 `skills/`
+4. 选择你需要的 Skill 目录，例如：
+   - `skills/docscode-init-require`
+   - `skills/docscode-create-require`
+   - `skills/docscode-archive-require`
+5. 将该目录导入你的本地 AI 工具或工作流系统
 
-安装 `docscode-create-require`：
-
-```bash
-python install-skill-from-github.py \
-  --repo ikunycj/docscode \
-  --path skills/docscode-create-require \
-  --ref master
-```
-
-安装 `docscode-archive-require`：
+### Option 2: Clone The Repository
 
 ```bash
-python install-skill-from-github.py \
-  --repo ikunycj/docscode \
-  --path skills/docscode-archive-require \
-  --ref master
+git clone https://github.com/ikunycj/docscode.git
 ```
 
-也可以使用 GitHub URL：
+然后从仓库里的 `skills/` 目录选择需要的 Skill。
+
+### Option 3: Sparse Checkout A Single Skill
 
 ```bash
-python install-skill-from-github.py \
-  --url https://github.com/ikunycj/docscode/tree/master/skills/docscode-create-require
+git clone --filter=blob:none --no-checkout https://github.com/ikunycj/docscode.git
+cd docscode
+git sparse-checkout init --cone
+git sparse-checkout set skills/docscode-create-require
+git checkout master
 ```
 
-建议：
+如果你只想拿一个 Skill，这种方式比完整 clone 更轻。
 
-- 想拿最新版本，使用 `master`
-- 想要更稳定的依赖点，使用 release tag
-- 安装后重启 Codex，让新 Skill 被正确加载
+### Option 4: Copy The Skill Folder Into Your Tool
+
+以 `docscode-create-require` 为例，你真正需要的只是这个目录：
+
+```text
+skills/docscode-create-require/
+```
+
+把它复制到你的工具约定的本地 Skills 目录，或在你的平台里按“导入本地目录”的方式接入即可。
+
+如果你的工具不支持 Skills 目录，也可以直接把 `SKILL.md` 作为工作流规范文件使用。
+
+### What To Import
+
+每个 Skill 最少包含：
+
+```text
+<skill-name>/
+  SKILL.md
+```
+通常情况下：
+- `SKILL.md` 是核心说明文件
+- 真正的发布单元就是 `skills/<skill-name>/`
+
 
 ## Example Prompts
 
@@ -222,72 +212,18 @@ Use $docscode-archive-require to archive docs/requirements/user-export after the
 - **归档是归档，不混入撰写或实现**
 - **初始化是初始化，不顺手补全业务内容**
 
-## Repository Layout
+## Compatibility Notes
 
-```text
-skills/
-  docscode-archive-require/
-  docscode-create-require/
-  docscode-init-require/
-scripts/
-  validate_skills.py
-.github/workflows/
-  validate-skills.yml
-```
+这个仓库使用“目录即分发单元”的方式组织 Skills，因此不绑定单一平台。
 
-说明：
+你可以这样理解它的兼容性：
 
-- `skills/<skill-name>/` 是实际发布单元
-- `SKILL.md` 定义触发语义与工作流
-- `agents/openai.yaml` 提供 UI 展示元数据
-- `scripts/validate_skills.py` 用于仓库级结构校验
+- 适合支持本地 Skill / Agent / Prompt 目录导入的工具
+- 适合作为团队内部 AI 工作流模板仓库直接引用
+- 也适合手工复制 `SKILL.md` 到你自己的规则系统中
 
-## Quality Checks
+如果某个工具只认自己的专用格式，你也可以把本仓库作为上游来源，再做一层适配转换。
 
-本仓库使用 GitHub Actions 做基础结构校验。
-
-本地执行：
-
-```bash
-python scripts/validate_skills.py
-```
-
-当前会检查：
-
-- 每个 Skill 是否存在 `SKILL.md`
-- `SKILL.md` frontmatter 是否只包含 `name` 与 `description`
-- Skill 名称是否为 hyphen-case，且与目录名一致
-- 每个 Skill 是否存在 `agents/openai.yaml`
-
-## Roadmap
-
-- 增加更多面向 `docs/requirements/` 的 Skill
-- 增加更细的 example / references 资源
-- 打 tag 并提供稳定安装版本
-- 完善 README、示例仓库和使用截图
-- 补充更系统的 Skill 设计规范
-
-## Contributing
-
-欢迎贡献：
-
-- 新的 requirements workflow Skills
-- 现有 Skill 的触发词优化
-- 更清晰的 guardrails 和输出边界
-- 校验脚本、分发流程和 GitHub Actions 改进
-
-提交前建议：
-
-```bash
-python scripts/validate_skills.py
-```
-
-并确保：
-
-- Skill 目录结构完整
-- `SKILL.md` 的触发描述准确
-- 不把仓库级 README / CHANGELOG 塞进单个 Skill 目录
-- 不让 Skill 越权修改 `docs/requirements` 之外的无关内容
 
 ## FAQ
 
@@ -298,10 +234,6 @@ python scripts/validate_skills.py
 ### 适合什么项目？
 
 适合希望在仓库内维护结构化需求文档的项目，尤其适合已经采用 `docs/requirements/` 目录约定的团队。
-
-### 可以只安装一个 Skill 吗？
-
-可以。每个 Skill 都可以独立安装和使用。
 
 ### 为什么强调 `require.md` 和 `test.md` 一起维护？
 

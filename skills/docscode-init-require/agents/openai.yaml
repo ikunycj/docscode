@@ -1,4 +1,0 @@
-interface:
-  display_name: "Init Requirement Workspace"
-  short_description: "Create missing docs and requirement markdown skeletons for docscode."
-  default_prompt: "Use $docscode-init-require to scaffold a missing docs and requirements workspace without drafting requirement content."

@@ -1,91 +1,140 @@
-# Docscode Skills
+# Docscode
 
-公开维护的 `docscode` 系列 Codex skills。
+[![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](./LICENSE)
+[![Validate Skills](https://github.com/ikunycj/docscode/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/ikunycj/docscode/actions/workflows/validate-skills.yml)
+[![Codex Skills](https://img.shields.io/badge/Codex-Skills-1f6feb)](./skills)
 
-这个仓库采用当前较常见的 skill 分发方式：
+`Docscode` 是一个面向中文需求文档工作流的开源 Skills 仓库，专门为 Codex / agent 场景提供可复用的 requirements 文档能力。
 
-- GitHub 仓库作为源码与版本来源
-- `skills/<skill-name>/` 作为单个 skill 的发布单元
-- 用户按 `repo + path` 或 GitHub URL 安装指定 skill
-- 用 PR、Issue、Release、CI 做持续维护
+它聚焦一件事：把 `docs/requirements/` 这套文档工作流做成可以安装、组合、维护和迭代的 Skills，而不是零散提示词。
+
+## Why Docscode
+
+- 面向真实仓库：围绕 `docs/requirements/`、`require.md`、`test.md` 组织工作流
+- 强约束输出：强调范围边界、追踪关系、归档规则和最小副作用
+- 适合团队协作：用 GitHub 仓库、PR、Issue、Release、CI 维护 Skills
+- 可按需安装：每个 Skill 都可以单独分发和安装
 
 ## Included Skills
 
-- `docscode-archive-require`
-- `docscode-init-require`
-- `docscode-create-require`
+| Skill | Purpose |
+| --- | --- |
+| `docscode-init-require` | 初始化 `docs/`、`docs/requirements/` 和基础 Markdown 骨架 |
+| `docscode-create-require` | 基于简要需求创建或更新 `require.md` 与 `test.md` |
+| `docscode-archive-require` | 归档已完成、废弃或不再维护的 requirement 目录 |
+
+## Quick Start
+
+推荐通过 GitHub 仓库路径安装单个 Skill。
+
+安装 `docscode-init-require`：
+
+```bash
+python install-skill-from-github.py \
+  --repo ikunycj/docscode \
+  --path skills/docscode-init-require \
+  --ref master
+```
+
+安装 `docscode-create-require`：
+
+```bash
+python install-skill-from-github.py \
+  --repo ikunycj/docscode \
+  --path skills/docscode-create-require \
+  --ref master
+```
+
+安装 `docscode-archive-require`：
+
+```bash
+python install-skill-from-github.py \
+  --repo ikunycj/docscode \
+  --path skills/docscode-archive-require \
+  --ref master
+```
+
+也可以直接使用 GitHub URL：
+
+```bash
+python install-skill-from-github.py \
+  --url https://github.com/ikunycj/docscode/tree/master/skills/docscode-create-require
+```
+
+建议：
+
+- 日常试用可以跟 `master`
+- 面向团队或生产环境时，优先使用 release tag
+- 安装后重启 Codex，以确保新 Skill 被正确加载
 
 ## Repository Layout
 
 ```text
 skills/
   docscode-archive-require/
-  docscode-init-require/
   docscode-create-require/
+  docscode-init-require/
 scripts/
   validate_skills.py
 .github/workflows/
   validate-skills.yml
 ```
 
-## Install
-
-推荐按仓库路径安装单个 skill，而不是手工复制目录。
-
-示例：
-
-```bash
-python install-skill-from-github.py \
-  --repo <owner>/<repo> \
-  --path skills/docscode-init-require \
-  --ref v0.1.0
-```
-
-也可以使用 GitHub URL：
-
-```bash
-python install-skill-from-github.py \
-  --url https://github.com/<owner>/<repo>/tree/v0.1.0/skills/docscode-init-require
-```
-
 说明：
 
-- `--ref` 推荐使用 tag 或 release，而不是长期追踪 `main`
-- 一次可以安装多个 `--path`
-- 安装后通常需要重启 Codex 以加载新 skill
+- `skills/<skill-name>/` 是实际发布单元
+- `agents/openai.yaml` 提供 UI 展示所需元数据
+- `scripts/validate_skills.py` 用于仓库级结构校验
 
-## Maintenance Workflow
+## Quality Checks
 
-建议维护方式：
+本仓库使用 GitHub Actions 对 Skill 结构做基础校验。
 
-1. 在 `main` 上开发，所有修改通过 PR 合并
-2. 每次改动都运行 `python scripts/validate_skills.py`
-3. 重要变更通过 GitHub Issue 讨论触发词、边界与输出格式
-4. 对外分发时打 tag，例如 `v0.1.0`
-5. 在 Release 中记录新增 skill、触发词调整、兼容性变化
-
-## Local Validation
+本地执行：
 
 ```bash
 python scripts/validate_skills.py
 ```
 
-校验项：
+当前会检查：
 
-- `skills/` 下每个 skill 都存在 `SKILL.md`
-- `SKILL.md` frontmatter 只包含 `name` 和 `description`
-- `name` 为 hyphen-case，且与目录名一致
-- 每个 skill 都包含 `agents/openai.yaml`
+- 每个 Skill 是否存在 `SKILL.md`
+- `SKILL.md` frontmatter 是否只包含 `name` 与 `description`
+- Skill 名称是否为 hyphen-case，且与目录名一致
+- 每个 Skill 是否存在 `agents/openai.yaml`
 
-## Publishing Steps
+## Versioning And Releases
 
-1. 在 GitHub 新建仓库
-2. 将当前目录内容推送到远端
-3. 创建首个 tag，例如 `v0.1.0`
-4. 在 README 中把 `<owner>/<repo>` 替换成真实仓库名
+推荐维护方式：
 
-## Notes
+1. 通过 PR 合并 Skill 变更
+2. 使用 Issue 讨论新增 Skill、触发词和边界约束
+3. 用 tag / Release 发布稳定版本，例如 `v0.1.0`
+4. 在 Release Notes 中记录新增 Skill、行为变化和兼容性影响
 
-- skill 目录内部只保留 agent 运行所需内容，不放 README、CHANGELOG 等仓库文档
-- 版本说明、License、CI 与安装文档统一放在仓库根目录
-- 这三个 skill 当前以中文工作流为主，适合中文需求文档场景
+如果你是使用方，建议优先安装 release tag，而不是长期跟随分支头部。
+
+## Contributing
+
+欢迎提交：
+
+- 新的 requirements 工作流 Skill
+- 已有 Skill 的触发词和 guardrails 改进
+- 更清晰的 `SKILL.md` 结构与示例
+- 校验脚本和分发流程优化
+
+提交前建议：
+
+```bash
+python scripts/validate_skills.py
+```
+
+并确保：
+
+- Skill 目录结构完整
+- `SKILL.md` 触发描述准确
+- 不把仓库级文档塞进单个 Skill 目录
+
+## License
+
+本项目使用 [MIT License](./LICENSE)。

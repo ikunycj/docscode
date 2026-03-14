@@ -1,0 +1,4 @@
+interface:
+  display_name: "Archive Requirement"
+  short_description: "Archive completed or retired requirement folders under docs/requirements."
+  default_prompt: "Use $docscode-archive-require to archive a finished requirement folder under docs/requirements."

@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.venv/
+
+# Local workspace content not intended for the public skills repo
+.codex/
+docs/
+openspec/
+AGENTS.md
